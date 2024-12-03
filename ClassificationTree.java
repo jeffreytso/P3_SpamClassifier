@@ -14,24 +14,27 @@ public class ClassificationTree extends Classifier {
     // Behavior: 
     //      - This constructor creates a classification tree based off a given scanner.
     // Parameter:
-    //      - Takes in a scanner. The scanner should be non-null.
+    //      - Takes in a scanner that reads off a file containing nodes formatted in a pre-order
+    //      - traversal of the tree. The scanner should be non-null.
     public ClassificationTree(Scanner sc) {
-        overallRoot = scannerConstrHelper(sc, overallRoot);
+        overallRoot = scannerConstrHelper(sc);
     }
 
     // Behavior: 
     //      - Private helper method to assist the scanner constructor in the formation of the tree.
     // Parameters:
-    //      - Takes in a scanner that should be non-null and a singular node (ClassificationNode).
-    private ClassificationNode scannerConstrHelper(Scanner sc, ClassificationNode currNode) {
+    //      - Takes in a scanner that reads off a file containing nodes formatted in a pre-order
+    //      - traversal of the tree. The scanner should be non-null.
+    private ClassificationNode scannerConstrHelper(Scanner sc) {
+        ClassificationNode currNode = null;
         if (sc.hasNextLine()) {
             String line1 = sc.nextLine();
             if (line1.contains("Feature")) {
                 String feature = line1.split(" ")[1];
                 double threshold = Double.parseDouble(sc.nextLine().split(" ")[1]);
                 currNode = new ClassificationNode(feature, threshold, null, null);
-                currNode.left = scannerConstrHelper(sc, currNode.left);
-                currNode.right = scannerConstrHelper(sc, currNode.right);
+                currNode.left = scannerConstrHelper(sc);
+                currNode.right = scannerConstrHelper(sc);
             } else {
                 currNode = new ClassificationNode(line1, null);
             }
@@ -77,8 +80,6 @@ public class ClassificationTree extends Classifier {
                     currNode.right = new ClassificationNode(result, data);
                     currNode.left = new ClassificationNode(currNode.label, currNode.oldData);
                 }
-                currNode.label = null;
-                currNode.oldData = null;
             }
             return currNode;
         } else {
@@ -161,13 +162,17 @@ public class ClassificationTree extends Classifier {
         }
     }
 
-    // Behavior: Saves this classifier to the provided PrintStream 'ps'
+    // Behavior: 
+    //      - Saves this classifier to the provided PrintStream 
+    //      - 'ps' in a pre-order traversal order.
     // Parameters: ps - the PrintStream to save the classifier to, which should be non-null
     public void save(PrintStream ps) {
         save(ps, overallRoot);
     }
 
-    // Behavior: Private helper method to help save this classifier to the provided PrintStream.
+    // Behavior: 
+    //      - Private helper method to help save this classifier to the 
+    //      - provided PrintStream in a pre-order traversal order.
     // Parameters: 
     //      - Takes in a PrintStream to save the classifier to, which should be non-null
     //      - as well as a node (ClassificationNode).
