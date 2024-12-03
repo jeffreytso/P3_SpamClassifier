@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 // Jeffrey Tso
-// 11/21/2024
+// 12/3/2024
 // CSE 123
 // Programming Assignment 3: Spam Classifier
 // Sean Eglip
@@ -32,9 +32,7 @@ public class ClassificationTree extends Classifier {
             if (line1.contains("Feature")) {
                 String feature = line1.split(" ")[1];
                 double threshold = Double.parseDouble(sc.nextLine().split(" ")[1]);
-                currNode = new ClassificationNode(feature, threshold, null, null);
-                currNode.left = scannerConstrHelper(sc);
-                currNode.right = scannerConstrHelper(sc);
+                currNode = new ClassificationNode(feature, threshold, scannerConstrHelper(sc), scannerConstrHelper(sc));
             } else {
                 currNode = new ClassificationNode(line1, null);
             }
